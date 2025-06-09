@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/1006c0ba-54a5-4f5a-bd98-8f3842e3102e)
 # Podcast Listening Time Prediction
 
 This project predicts the listening time of podcast episodes based on features such as episode length, genre, host popularity, guest popularity, publication day, publication time, number of ads, and episode sentiment. It includes two components:
