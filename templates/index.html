@@ -4,116 +4,309 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Podcast Listening Time Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-bg: #F2F2F2;
+            --primary-text: #000000;
+            --accent: #B6B09F;
+            --form-bg: #EAE4D5;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --result-bg: #EAE4D5;
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: #18122B;
+            --primary-text: #ffffff;
+            --accent: #443C68;
+            --form-bg: #393053;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --result-bg: #635985;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            background-color: #f4f4f4;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             text-align: center;
-            color: #333;
+            color: var(--accent);
+            animation: fadeIn 1s ease-in;
         }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.8s ease-out;
+        }
+
         form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: var(--form-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: background-color 0.3s;
         }
+
         label {
             display: block;
-            margin: 10px 0 5px;
+            margin: 15px 0 5px;
+            font-weight: 600;
+            color: var(--primary-text);
         }
+
         input, select {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            transition: border-color 0.3s, transform 0.2s;
         }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
         button {
-            background-color: #28a745;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--accent), #4b6cb7);
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
         }
+
         button:hover {
-            background-color: #218838;
+            transform: translateY(-2px);
+            background: linear-gradient(90deg, #4b6cb7, var(--accent));
         }
+
+        button:active {
+            animation: pulse 0.3s;
+        }
+
         .result {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #e9ecef;
-            border-radius: 4px;
+            padding: 15px;
+            background-color: var(--result-bg);
+            border-radius: 8px;
             text-align: center;
+            font-size: 1.1rem;
+            color: var(--primary-text);
+            animation: fadeIn 0.5s ease-in;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle input {
+            display: none;
+        }
+
+        .theme-toggle-label {
+            width: 50px;
+            height: 24px;
+            background-color: #e2e8f0;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+            color: var(--primary-text);
+        }
+
+        .theme-toggle-label::before {
+            content: '🌙';
+            position: absolute;
+            left: 5px;
+            transition: opacity 0.3s;
+        }
+
+        .theme-toggle-label::after {
+            content: '🌞';
+            position: absolute;
+            right: 5px;
+            transition: opacity 0.3s;
+        }
+
+        #theme-toggle:checked + .theme-toggle-label::before {
+            opacity: 0;
+        }
+
+        #theme-toggle:checked + .theme-toggle-label::after {
+            opacity: 1;
+        }
+
+        .theme-toggle-label::after {
+            opacity: 0;
+        }
+
+        #theme-toggle:checked + .theme-toggle-label {
+            background-color: var(--accent);
+        }
+
+        #theme-toggle:checked + .theme-toggle-label::after {
+            transform: translateX(-26px);
+        }
+
+        .theme-toggle-label::after {
+            transform: translateX(26px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Podcast Listening Time Predictor</h1>
-    <form method="POST" action="/predict">
-        <label for="Episode_Length_minutes">Episode Length (minutes):</label>
-        <input type="number" step="0.01" name="Episode_Length_minutes" required>
-        
-        <label for="Host_Popularity_percentage">Host Popularity (%):</label>
-        <input type="number" step="0.01" min="0" max="100" name="Host_Popularity_percentage" required>
-        
-        <label for="Guest_Popularity_percentage">Guest Popularity (%):</label>
-        <input type="number" step="0.01" min="0" max="100" name="Guest_Popularity_percentage" required>
-        
-        <label for="Number_of_Ads">Number of Ads:</label>
-        <input type="number" step="1" min="0" name="Number_of_Ads" required>
-        
-        <label for="Publication_Day">Publication Day:</label>
-        <select name="Publication_Day" required>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-        
-        <label for="Publication_Time">Publication Time:</label>
-        <select name="Publication_Time" required>
-            <option value="Morning">Morning</option>
-            <option value="Afternoon">Afternoon</option>
-            <option value="Evening">Evening</option>
-            <option value="Night">Night</option>
-        </select>
-        
-        <label for="Genre">Genre:</label>
-        <select name="Genre" required>
-            <option value="Comedy">Comedy</option>
-            <option value="Education">Education</option>
-            <option value="Health">Health</option>
-            <option value="Lifestyle">Lifestyle</option>
-            <option value="Music">Music</option>
-            <option value="News">News</option>
-            <option value="Sports">Sports</option>
-            <option value="Technology">Technology</option>
-            <option value="True Crime">True Crime</option>
-        </select>
-        
-        <label for="Episode_Sentiment">Episode Sentiment:</label>
-        <select name="Episode_Sentiment" required>
-            <option value="Negative">Negative</option>
-            <option value="Neutral">Neutral</option>
-            <option value="Positive">Positive</option>
-        </select>
-        
-        <button type="submit">Predict</button>
-    </form>
-    
-    {% if prediction %}
-    <div class="result">
-        {{ prediction }}
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-toggle">
+        <label for="theme-toggle" class="theme-toggle-label"></label>
     </div>
-    {% endif %}
+    <h1>Podcast Listening Time Predictor</h1>
+    <div class="container">
+        <form method="POST" action="/predict">
+            <label for="Episode_Length_minutes">Episode Length (minutes):</label>
+            <input type="number" step="0.01" name="Episode_Length_minutes" required>
+            
+            <label for="Host_Popularity_percentage">Host Popularity (%):</label>
+            <input type="number" step="0.01" min="0" max="100" name="Host_Popularity_percentage" required>
+            
+            <label for="Guest_Popularity_percentage">Guest Popularity (%):</label>
+            <input type="number" step="0.01" min="0" max="100" name="Guest_Popularity_percentage" required>
+            
+            <label for="Number_of_Ads">Number of Ads:</label>
+            <input type="number" step="1" min="0" name="Number_of_Ads" required>
+            
+            <label for="Publication_Day">Publication Day:</label>
+            <select name="Publication_Day" required>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+            
+            <label for="Publication_Time">Publication Time:</label>
+            <select name="Publication_Time" required>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
+            </select>
+            
+            <label for="Genre">Genre:</label>
+            <select name="Genre" required>
+                <option value="Comedy">Comedy</option>
+                <option value="Education">Education</option>
+                <option value="Health">Health</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Music">Music</option>
+                <option value="News">News</option>
+                <option value="Sports">Sports</option>
+                <option value="Technology">Technology</option>
+                <option value="True Crime">True Crime</option>
+            </select>
+            
+            <label for="Episode_Sentiment">Episode Sentiment:</label>
+            <select name="Episode_Sentiment" required>
+                <option value="Negative">Negative</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Positive">Positive</option>
+            </select>
+            
+            <button type="submit">Predict</button>
+        </form>
+        
+        {% if prediction %}
+        <div class="result">
+            {{ prediction }}
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        const toggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Load saved theme from localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
 </body>
 </html>
