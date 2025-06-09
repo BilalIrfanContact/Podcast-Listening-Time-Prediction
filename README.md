@@ -1,18 +1,5 @@
 # Podcast Listening Time Prediction
 
-## Table of Contents
-- [📖 Project Overview](#project-overview)
-- [📂 Repository Structure](#repository-structure)
-- [📊 Dataset Description](#dataset-description)
-- [🔧 Methodology](#methodology)
-- [⚙️ Installation and Setup](#installation-and-setup)
-- [🚀 Usage](#usage)
-- [📈 Results](#results)
-- [🔮 Future Improvements](#future-improvements)
-- [🤝 Contributing](#contributing)
-- [📬 Contact](#contact)
-
-## 📖 Project Overview
 This project predicts the listening time of podcast episodes based on features such as episode length, genre, host popularity, guest popularity, publication day, publication time, number of ads, and episode sentiment. It includes two components:
 1. **Jupyter Notebook (`podcast_time.ipynb`)**: Contains data analysis, preprocessing, and linear regression model training on a dataset of 750,000 podcast episodes.
 2. **Flask Web Application (`app.py`)**: A web interface for users to input podcast features and receive predicted listening times using the trained model.
